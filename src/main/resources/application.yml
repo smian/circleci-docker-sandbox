@@ -16,3 +16,8 @@ endpoints:
     enabled: true
   shutdown:
     enabled: true
+
+logging:
+  level:
+    root: INFO
+    hello: DEBUG
