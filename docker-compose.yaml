@@ -1,0 +1,37 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      args:
+        - DEPENDENCY=build/dependency
+    networks:
+      - localstack-network
+    environment:
+      - com.amazonaws.sdk.disableCertChecking=true
+      - SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE}
+      # env vars for integrating with localstack
+      - AWS_ACCESS_KEY_ID=anything_for_localstack
+      - AWS_SECRET_ACCESS_KEY=anything_for_localstack
+      - AWS_DEFAULT_REGION=us-west-2
+      - AWS_CBOR_DISABLE=1 # required to integrate with localstack https://github.com/mhart/kinesalite#cbor-protocol-issues-with-the-java-sdk
+    depends_on:
+      - localstack
+  localstack:
+    image: localstack/localstack
+    privileged: true
+    networks:
+      - localstack-network
+    ports:
+      - "4567-4582:4567-4582"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      - SERVICES=kinesis,dynamodb
+      - DEFAULT_REGION=us-west-2
+      - HOSTNAME=localstack
+      - HOSTNAME_EXTERNAL=localhost
+      - USE_SSL=true
+networks:
+  localstack-network:

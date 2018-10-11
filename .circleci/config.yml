@@ -1,0 +1,88 @@
+defaults: &defaults
+  shell: /bin/bash --login -eo pipefail
+  docker:
+  - image: circleci/openjdk:8-jdk-node
+  environment:
+    # Customize the JVM maximum heap limit
+    JVM_OPTS: -Xmx3200m
+    TERM: dumb
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+#    machine: true
+    steps:
+      - run:
+          name: install docker
+          command: |
+            sudo apt-get update
+            sudo apt-get install \
+                 apt-transport-https \
+                 ca-certificates \
+                 curl \
+                 software-properties-common
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+            sudo add-apt-repository \
+                 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+                 xenial \
+                 stable"
+            sudo apt-get update
+            sudo apt-get install docker-ce
+
+            sudo curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+
+      - checkout
+      - setup_remote_docker
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: ./gradlew dependencies
+
+      - save_cache:
+          paths:
+          - ~/.gradle/caches
+          - ~/.gradle/wrapper
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      - run:
+          name: make test
+          command: |
+            export AWS_ACCESS_KEY_ID=anything_for_localstack
+            export AWS_SECRET_ACCESS_KEY=anything_for_localstack
+            export AWS_DEFAULT_REGION=us-west-2
+            export AWS_CBOR_DISABLE=1
+            make test
+
+      - store_test_results:
+          path: ~/build/test-results/test
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+    - build:
+        filters:
+          branches:
+            only:
+            - develop
+    - approve-build-deploy-prod:
+        type: approval # DO NOT REMOVE THIS
+        filters:
+          branches:
+            only:
+              - master
+    - build-deploy-prod:
+        requires:
+            - approve-build-deploy-prod
+        filters:
+          branches:
+            only:
+              - master
+
