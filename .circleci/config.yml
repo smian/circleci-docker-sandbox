@@ -60,10 +60,6 @@ jobs:
             export AWS_DEFAULT_REGION=us-west-2
             export AWS_CBOR_DISABLE=1
             make test
-      - run:
-          name: "Failure: output container logs to console"
-          command: |
-            docker-compose logs
 
       - store_test_results:
           path: ~/build/test-results/test
