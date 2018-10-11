@@ -27,7 +27,7 @@ build: # Test
 	docker-compose up
 
 test: ## Run tests
-	@docker-compose up localstack & > /dev/null
+	@docker-compose up localstack &
 	@sleep 10
 	@./gradlew cleanTest test
 #	@docker stop `docker ps -a -q`
