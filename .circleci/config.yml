@@ -59,7 +59,7 @@ jobs:
             export AWS_SECRET_ACCESS_KEY=anything_for_localstack
             export AWS_DEFAULT_REGION=us-west-2
             export AWS_CBOR_DISABLE=1
-            time ./gradlew -d test
+            time ./gradlew test
 #            make test
 
       - store_test_results:
