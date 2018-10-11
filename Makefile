@@ -30,4 +30,4 @@ test: ## Run tests
 	@docker-compose up localstack & > /dev/null
 	@sleep 10
 	@./gradlew cleanTest test
-	@docker stop `docker ps -a -q`
+#	@docker stop `docker ps -a -q`
