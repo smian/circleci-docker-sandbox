@@ -36,20 +36,20 @@ jobs:
       - checkout
       - setup_remote_docker
 
-##      # Download and cache dependencies
-##      - restore_cache:
-##          keys:
-##          - v1-dependencies-{{ checksum "build.gradle" }}
-##          # fallback to using the latest cache if no exact match is found
-##          - v1-dependencies-
-#
-#      - run: ./gradlew dependencies
-#
-#      - save_cache:
-#          paths:
-#          - ~/.gradle/caches
-#          - ~/.gradle/wrapper
-#          key: v1-dependencies-{{ checksum "build.gradle" }}
+#      # Download and cache dependencies
+#      - restore_cache:
+#          keys:
+#          - v1-dependencies-{{ checksum "build.gradle" }}
+#          # fallback to using the latest cache if no exact match is found
+#          - v1-dependencies-
+
+      - run: ./gradlew clean compileTestJava compileTest
+
+      - save_cache:
+          paths:
+          - ~/.gradle/caches
+          - ~/.gradle/wrapper
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
       - run:
           name: make test
