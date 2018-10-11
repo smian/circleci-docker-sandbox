@@ -13,35 +13,35 @@ jobs:
     <<: *defaults
 #    machine: true
     steps:
-      - run:
-          name: install docker
-          command: |
-            sudo apt-get update
-            sudo apt-get install \
-                 apt-transport-https \
-                 ca-certificates \
-                 curl \
-                 software-properties-common
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-            sudo add-apt-repository \
-                 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-                 xenial \
-                 stable"
-            sudo apt-get update
-            sudo apt-get install docker-ce
-
-            sudo curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
+#      - run:
+#          name: install docker
+#          command: |
+#            sudo apt-get update
+#            sudo apt-get install \
+#                 apt-transport-https \
+#                 ca-certificates \
+#                 curl \
+#                 software-properties-common
+#            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#            sudo add-apt-repository \
+#                 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+#                 xenial \
+#                 stable"
+#            sudo apt-get update
+#            sudo apt-get install docker-ce
+#
+#            sudo curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#            sudo chmod +x /usr/local/bin/docker-compose
 
       - checkout
       - setup_remote_docker
 
-#      # Download and cache dependencies
-#      - restore_cache:
-#          keys:
-#          - v1-dependencies-{{ checksum "build.gradle" }}
-#          # fallback to using the latest cache if no exact match is found
-#          - v1-dependencies-
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
 
       - run: ./gradlew clean dependencies
 
