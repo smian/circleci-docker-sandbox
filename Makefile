@@ -27,7 +27,7 @@ build: # Test
 	docker-compose up
 
 test: ## Run tests
-	docker-compose up -d localstack
+	docker-compose up -d localstack database
 	@sleep 10
 	@docker-compose logs localstack
 	@./gradlew cleanTest test

@@ -31,5 +31,15 @@ services:
       - HOSTNAME=localstack
       - HOSTNAME_EXTERNAL=localhost
       - USE_SSL=true
+  database:
+    image: postgres:9.6-alpine
+    ports:
+    - "5432:5432"
+    volumes:
+    - /var/lib/postgresql/data
+    environment:
+    - POSTGRES_PASSWORD=password
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=postgres
 networks:
   localstack-network:
