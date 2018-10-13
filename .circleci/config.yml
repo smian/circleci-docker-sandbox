@@ -51,6 +51,7 @@ build-common: &build-common
         paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper
+        - /caches/app.tar
         key: v1-dependencies-{{ checksum "build.gradle" }}
 
     - run:
@@ -75,19 +76,13 @@ jobs:
     environment:
       - ENVIRONMENT_NAME: dev
     <<: *build-common
-    steps:
-    - run:
-        command: |
-          echo "Build Dev"
 
   build-deploy-prod:
-    <<: *build-common
     environment:
-    - ENVIRONMENT_NAME: prod
-    steps:
-    - run:
-        command: |
-          echo "Build Prod"
+      - ENVIRONMENT_NAME: prod
+    <<: *build-common
+
+
 
 workflows:
   version: 2
