@@ -1,14 +1,14 @@
 defaults: &defaults
   shell: /bin/bash --login -eo pipefail
-  machine:
-    docker_layer_caching: true
-    image: circleci/openjdk:8-jdk-node
   environment:
     # Customize the JVM maximum heap limit
     JVM_OPTS: -Xmx3200m
     TERM: dumb
 
 build-common: &build-common
+  machine:
+    - docker_layer_caching: true
+    - image: circleci/openjdk:8-jdk-node
   <<: *defaults
   steps:
     - checkout
