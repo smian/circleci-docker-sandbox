@@ -21,9 +21,9 @@ _run:
       echo 'Installing Terraform' && \
       sudo wget -O /tmp/terraform.zip \
       $(curl -s https://www.terraform.io/downloads.html | grep linux_amd64.zip | cut -d'"' -f2) && \
-      mkdir -p /usr/local/bin/terraform && \
-      unzip /tmp/terraform.zip -d /usr/local/bin && \
-      chmod +x /usr/local/bin/terraform
+      sudo unzip /tmp/terraform.zip -d /usr/local/bin && \
+      sudo chmod +x /usr/local/bin/terraform
+      terraform --version
 
       # Install Terragrunt
       echo 'Installing Terragrunt' && \
@@ -31,6 +31,7 @@ _run:
       $(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | \
       jq -r '.assets|.[]|select(.name=="terragrunt_linux_amd64")|.browser_download_url') && \
       sudo chmod +x /usr/local/bin/terragrunt
+      terragrunt --version
 
 #      echo "Install Terragrunt"
 #      export USER=circleci
@@ -72,12 +73,12 @@ build-common: &build-common
     - run:
         name: make test-$ENVIRONMENT_NAME
         command: |
-          echo "ENVIRONMENT_NAME=$ENVIRONMENT_NAME"
           set -e
           export AWS_ACCESS_KEY_ID=anything_for_localstack
           export AWS_SECRET_ACCESS_KEY=anything_for_localstack
           export AWS_DEFAULT_REGION=us-west-2
           export AWS_CBOR_DISABLE=1
+          echo "ENVIRONMENT_NAME=$ENVIRONMENT_NAME"
           make test-$ENVIRONMENT_NAME
 
     - store_test_results:
