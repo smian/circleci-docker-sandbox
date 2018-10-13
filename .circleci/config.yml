@@ -57,10 +57,7 @@ jobs:
     <<: *build-common
     environment:
     - ENVIRONMENT_NAME: prod
-    steps:
-    - run:
-        command: |
-          echo "Build Prod"
+    <<: *build-common
 
 workflows:
   version: 2
