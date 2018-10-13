@@ -17,12 +17,13 @@ _run:
       echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bash_rc
       source $HOME/.bash_rc
       eb --version
+
       # Install Terraform
       echo 'Installing Terraform' && \
       sudo wget -O /tmp/terraform.zip \
       $(curl -s https://www.terraform.io/downloads.html | grep linux_amd64.zip | cut -d'"' -f2) && \
       sudo unzip /tmp/terraform.zip -d /usr/local/bin && \
-      sudo chmod +x /usr/local/bin/terraform
+      sudo chmod +x /usr/local/bin/terraform && \
       terraform --version
 
       # Install Terragrunt
@@ -30,7 +31,7 @@ _run:
       sudo wget -O /usr/local/bin/terragrunt \
       $(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | \
       jq -r '.assets|.[]|select(.name=="terragrunt_linux_amd64")|.browser_download_url') && \
-      sudo chmod +x /usr/local/bin/terragrunt
+      sudo chmod +x /usr/local/bin/terragrunt && \
       terragrunt --version
 
 #      echo "Install Terragrunt"
