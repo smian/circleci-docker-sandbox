@@ -49,13 +49,10 @@ build-common: &build-common
 version: 2
 jobs:
   build-deploy-dev:
-    <<: *build-common
     environment:
       - ENVIRONMENT_NAME: dev
-    steps:
-    - run:
-        command: |
-          echo "Build Dev"
+    <<: *build-common
+
   build-deploy-prod:
     <<: *build-common
     environment:
