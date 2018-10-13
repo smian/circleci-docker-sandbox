@@ -5,12 +5,35 @@ defaults: &defaults
     JVM_OPTS: -Xmx3200m
     TERM: dumb
 
+_run:
+  install-tools: &install-tools
+    name: Install tools
+    command: |
+      echo "Install EB CLI"
+      sudo apt update
+      sudo apt install python-pip
+      pip install --upgrade --user "urllib3==1.22" awscli
+      pip install awsebcli --upgrade --user
+      echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bash_rc
+      source $HOME/.bash_rc
+      eb --version
+      echo "Install Terragrunt"
+      export USER=circleci
+      sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+      test -d ~/.linuxbrew && PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+      test -d /home/linuxbrew/.linuxbrew && PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+      test -r ~/.bash_profile && echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.bash_profile
+      echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.profile
+      brew install terragrunt
+
 build-common: &build-common
   machine:
     docker_layer_caching: true
     image: circleci/classic:latest
   <<: *defaults
   steps:
+    - run: *install-tools
+
     - checkout
 
     # Download and cache dependencies
