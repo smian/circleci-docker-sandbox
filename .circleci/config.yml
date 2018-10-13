@@ -17,14 +17,28 @@ _run:
       echo 'export PATH=$HOME/.local/bin:$PATH' >> $HOME/.bash_rc
       source $HOME/.bash_rc
       eb --version
-      echo "Install Terragrunt"
-      export USER=circleci
-      sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-      test -d ~/.linuxbrew && PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
-      test -d /home/linuxbrew/.linuxbrew && PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
-      test -r ~/.bash_profile && echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.bash_profile
-      echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.profile
-      brew install terragrunt
+      # Install Terraform
+      echo 'Installing Terraform' && \
+      sudo wget -O /tmp/terraform.zip \
+      $(curl -s https://www.terraform.io/downloads.html | grep linux_amd64.zip | cut -d'"' -f2) && \
+      unzip /tmp/terraform.zip -d /usr/local/bin && \
+      chmod +x /usr/local/bin/terraform
+
+      # Install Terragrunt
+      echo 'Installing Terragrunt' && \
+      sudo wget -O /usr/local/bin/terragrunt \
+      $(curl -s https://api.github.com/repos/gruntwork-io/terragrunt/releases/latest | \
+      jq -r '.assets|.[]|select(.name=="terragrunt_linux_amd64")|.browser_download_url') && \
+      sudo chmod +x /usr/local/bin/terragrunt
+
+#      echo "Install Terragrunt"
+#      export USER=circleci
+#      sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+#      test -d ~/.linuxbrew && PATH="$HOME/.linuxbrew/bin:$HOME/.linuxbrew/sbin:$PATH"
+#      test -d /home/linuxbrew/.linuxbrew && PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
+#      test -r ~/.bash_profile && echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.bash_profile
+#      echo "export PATH='$(brew --prefix)/bin:$(brew --prefix)/sbin'":'"$PATH"' >>~/.profile
+#      brew install terragrunt
 
 build-common: &build-common
   machine:
