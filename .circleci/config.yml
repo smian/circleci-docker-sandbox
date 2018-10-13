@@ -75,6 +75,10 @@ jobs:
     environment:
       - ENVIRONMENT_NAME: dev
     <<: *build-common
+    steps:
+    - run:
+        command: |
+          echo "Build Dev"
 
   build-deploy-prod:
     <<: *build-common
