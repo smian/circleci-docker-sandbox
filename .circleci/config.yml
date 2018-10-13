@@ -7,8 +7,8 @@ defaults: &defaults
 
 build-common: &build-common
   machine:
-    - docker_layer_caching: true
-    - image: circleci/openjdk:8-jdk-node
+    docker_layer_caching: true
+    image: circleci/openjdk:8-jdk-node
   <<: *defaults
   steps:
     - checkout
