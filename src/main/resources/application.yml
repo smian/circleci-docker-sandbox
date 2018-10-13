@@ -20,4 +20,4 @@ endpoints:
 logging:
   level:
     root: INFO
-    hello: DEBUG
+    hello: INFO
