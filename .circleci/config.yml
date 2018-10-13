@@ -21,6 +21,7 @@ _run:
       echo 'Installing Terraform' && \
       sudo wget -O /tmp/terraform.zip \
       $(curl -s https://www.terraform.io/downloads.html | grep linux_amd64.zip | cut -d'"' -f2) && \
+      mkdir -p /usr/local/bin/terraform && \
       unzip /tmp/terraform.zip -d /usr/local/bin && \
       chmod +x /usr/local/bin/terraform
 
