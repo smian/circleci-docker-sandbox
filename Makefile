@@ -32,3 +32,15 @@ test: ## Run tests
 	@docker-compose logs localstack
 	@./gradlew cleanTest test
 
+trigger-example:
+	MESSAGE=`git log -1 HEAD --pretty=format:%s` &&\
+	echo "$$MESSAGE" &&\
+     if [[ "$$MESSAGE" == *\[tg-apply\]* ]]; then \
+     	echo "terragrunt plan"; \
+     	echo "terragrunt apply"; \
+     fi
+#            echo "do action here" &&\
+#     else &&\
+#            echo "do nothing" &&\
+#     fi
+

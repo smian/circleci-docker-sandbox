@@ -1,15 +1,12 @@
-defaults: &defaults
-  shell: /bin/bash --login -eo pipefail
-  environment:
-    # Customize the JVM maximum heap limit
-    JVM_OPTS: -Xmx3200m
-    TERM: dumb
-
 build-common: &build-common
   machine:
     docker_layer_caching: true
     image: circleci/classic:latest
-  <<: *defaults
+  shell: /bin/bash --login -eo pipefail
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
   steps:
     - checkout
 
