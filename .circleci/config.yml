@@ -57,6 +57,7 @@ build-common: &build-common
     - run:
         name: make test-$ENVIRONMENT_NAME
         command: |
+          echo "ENVIRONMENT_NAME=$ENVIRONMENT_NAME"
           set -e
           export AWS_ACCESS_KEY_ID=anything_for_localstack
           export AWS_SECRET_ACCESS_KEY=anything_for_localstack
