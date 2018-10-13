@@ -29,5 +29,6 @@ build: # Test
 test: ## Run tests
 	docker-compose up -d localstack
 	@sleep 10
+	@docker-compose logs localstack
 	@./gradlew cleanTest test
-	docker-compose logs localstack
+
