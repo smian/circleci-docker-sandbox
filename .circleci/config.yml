@@ -55,16 +55,14 @@ build-common: &build-common
         key: v1-dependencies-{{ checksum "build.gradle" }}
 
     - run:
-        name: make test
+        name: make test-$ENVIRONMENT_NAME
         command: |
           set -e
           export AWS_ACCESS_KEY_ID=anything_for_localstack
           export AWS_SECRET_ACCESS_KEY=anything_for_localstack
           export AWS_DEFAULT_REGION=us-west-2
           export AWS_CBOR_DISABLE=1
-          make test
-
-    - run: echo "ENVIRONMENT_NAME=${ENVIRONMENT_NAME}"
+          make test-$ENVIRONMENT_NAME
 
     - store_test_results:
         path: ~/build/test-results/test
@@ -81,8 +79,6 @@ jobs:
     environment:
       - ENVIRONMENT_NAME: prod
     <<: *build-common
-
-
 
 workflows:
   version: 2
